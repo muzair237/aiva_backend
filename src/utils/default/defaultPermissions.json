@@ -1,0 +1,121 @@
+[
+  {
+    "route": "/dashboard",
+    "can": "dashboard.nav",
+    "description": "Can view the dashboard page",
+    "parent": [
+      "$"
+    ]
+  },
+  {
+    "route": "/chat",
+    "can": "chat.nav",
+    "description": "Can view the chat page",
+    "parent": [
+      "$"
+    ]
+  },
+  {
+    "route": "/permissions",
+    "description": "Can view the permissions page",
+    "can": "permissions.nav",
+    "parent": [
+      "$"
+    ]
+  },
+  {
+    "route": "/roles",
+    "description": "Can view the roles page",
+    "can": "roles.nav",
+    "parent": [
+      "$"
+    ]
+  },
+  {
+    "route": "/admins",
+    "description": "Can View the admins page",
+    "can": "admins.nav",
+    "parent": [
+      "$"
+    ]
+  },
+  {
+    "route": "/permissions/create-permission",
+    "description": "Can create new permission",
+    "can": "permissions.create",
+    "parent": [
+      "permissions"
+    ]
+  },
+  {
+    "route": "/permission/update-permission",
+    "description": "Can update details of permission",
+    "can": "permissions.update",
+    "parent": [
+      "permissions"
+    ]
+  },
+  {
+    "route": "/permissions/delete-permission",
+    "description": "Can delete permission",
+    "can": "permissions.delete",
+    "parent": [
+      "permissions"
+    ]
+  },{
+    "route": "/roles/create-role",
+    "description": "Can create new role",
+    "can": "roles.create",
+    "parent": [
+      "roles"
+    ]
+  },
+  {
+    "route": "/roles/update-role",
+    "description": "Can update details of role",
+    "can": "roles.update",
+    "parent": [
+      "roles"
+    ]
+  },
+  {
+    "route": "/roles/delete-role",
+    "description": "Can delete role",
+    "can": "roles.delete",
+    "parent": [
+      "roles"
+    ]
+  },
+  {
+    "route": "/admins/create-user",
+    "description": "Can create new user",
+    "can": "admins.create",
+    "parent": [
+      "admins"
+    ]
+  },
+  {
+    "route": "/admins/update-user",
+    "description": "Can update details of a user",
+    "can": "admins.edit",
+    "parent": [
+      "admins"
+    ]
+  },
+  {
+    "route": "/admins/update-password",
+    "description": "Can Update user's password",
+    "can": "admins.update-password",
+    "parent": [
+      "admins"
+    ]
+  },
+  {
+    "route": "/admins/delete-user",
+    "description": "Can delete a user",
+    "can": "admins.delete",
+    "parent": [
+      "admins"
+    ]
+  }
+]
