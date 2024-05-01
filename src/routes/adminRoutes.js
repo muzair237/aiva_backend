@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import { rateLimit } from 'express-rate-limit';
-import isUser from '../middlewares/isUser.js';
+import isAdmin from '../middlewares/isAdmin.js';
 import tryCatch from '../middlewares/tryCatch.js';
-import { userController } from '../controllers/index.js';
+import { adminController } from '../controllers/index.js';
 import { WINDOW, MAX_LIMIT } from '../../env.js';
 
 const userRoutes = Router();
@@ -15,7 +15,7 @@ const limiter = rateLimit({
   },
 });
 
-userRoutes.post('/login', [limiter], tryCatch(userController.login));
-userRoutes.get('/logout', [isUser, limiter], tryCatch(userController.logout));
+userRoutes.post('/login', [limiter], tryCatch(adminController.login));
+userRoutes.get('/logout', [isAdmin, limiter], tryCatch(adminController.logout));
 
 export default userRoutes;

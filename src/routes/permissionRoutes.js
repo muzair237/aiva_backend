@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { rateLimit } from 'express-rate-limit';
-import isUser from '../middlewares/isUser.js';
+import isUser from '../middlewares/isAdmin.js';
 import tryCatch from '../middlewares/tryCatch.js';
 import { permissionController } from '../controllers/index.js';
 import { WINDOW, MAX_LIMIT } from '../../env.js';

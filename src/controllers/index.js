@@ -1,4 +1,4 @@
-import userController from './userController.js';
+import adminController from './adminController.js';
 import permissionController from './permissionController.js';
 
-export { userController, permissionController };
+export { adminController, permissionController };
