@@ -7,25 +7,25 @@ export default {
     if (!email || !password) {
       return res.status(401).json({ success: false, message: 'Invalid Credentials!' });
     }
-    let user = await ADMIN.findOne({ email });
-    if (!user || !helper.comparePassword(password, user?.password)) {
+    let admin = await ADMIN.findOne({ email });
+    if (!admin || !helper.comparePassword(password, admin?.password)) {
       return res.status(404).json({ success: false, message: 'Incorrect Email or Password!' });
     }
 
-    user = user.toObject();
-    delete user.password;
+    admin = admin.toObject();
+    delete admin.password;
 
-    const token = helper.generateJWTToken({ id: user?._id, email });
-    const { currentDateTime, oneHourAfterDateTime } = helper.getJWTExpirationTime();
+    const token = helper.generateJWTToken({ id: admin?._id, email });
+    const { iat, exp } = helper.decryptToken(token);
     await ADMIN_JWT.findOneAndUpdate(
       {
-        user_id: user?._id,
+        user_id: admin?._id,
       },
       {
-        user_id: user?._id,
+        user_id: admin?._id,
         token,
-        iat: currentDateTime,
-        exp: oneHourAfterDateTime,
+        iat,
+        exp,
       },
       {
         upsert: true,
@@ -35,13 +35,13 @@ export default {
       success: true,
       message: 'Logged In Successfully!',
       token,
-      user,
+      admin,
     });
   },
 
   logout: async (req, res) => {
-    const user = req.user;
-    await ADMIN_JWT.findOneAndDelete({ user_id: user?._id });
+    const admin = req.admin;
+    await ADMIN_JWT.findOneAndDelete({ user_id: admin?._id });
     return res.status(200).json({ success: true, message: 'Logged Out Successfully!' });
   },
 };

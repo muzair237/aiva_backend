@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { ADMIN, ADMIN_JWT } from '../models/index.js';
+import { USER, USER_JWT } from '../models/index.js';
 import { SECRET } from '../../env.js';
 
 export default (req, res, next) => {
@@ -27,14 +27,14 @@ export default (req, res, next) => {
         message: `${`${err.message}`}`,
       });
     }
-    const user = await ADMIN.findById(decodedToken.id);
+    const user = await USER.findById(decodedToken.id);
     if (!user) {
       return res.status(401).send({
         error: true,
         message: 'Unauthorized!',
       });
     }
-    const isValid = await ADMIN_JWT.findOne({ token });
+    const isValid = await USER_JWT.findOne({ token });
     if (!isValid) {
       return res.status(401).send({
         isUnAuthorized: true,

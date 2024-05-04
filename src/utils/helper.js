@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { format, addHours } from 'date-fns';
+import { jwtDecode } from 'jwt-decode';
 import { SECRET } from '../../env.js';
 
 export default {
@@ -43,14 +43,17 @@ export default {
 
   generateJWTToken: payload =>
     jwt.sign(payload, SECRET, {
-      expiresIn: '48h',
+      expiresIn: '15d',
       algorithm: 'HS256',
     }),
 
-  getJWTExpirationTime: () => ({
-    currentDateTime: format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
-    oneHourAfterDateTime: format(addHours(new Date(), 1), 'yyyy-MM-dd HH:mm:ss'),
-  }),
+  decryptToken: token => {
+    const decrypted = jwtDecode(token);
+    const iat = new Date(decrypted.iat * 1000);
+    const exp = new Date(decrypted.exp * 1000);
+
+    return { iat, exp };
+  },
 
   getSorting: (sortingOrder, fieldName) => {
     switch (sortingOrder) {

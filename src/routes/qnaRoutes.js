@@ -1,11 +1,11 @@
 import { Router } from 'express';
 import { rateLimit } from 'express-rate-limit';
-import isAdmin from '../middlewares/isAdmin.js';
+// import isUser from '../middlewares/isAdmin.js';
 import tryCatch from '../middlewares/tryCatch.js';
-import { adminController } from '../controllers/index.js';
+import { QnAController } from '../controllers/index.js';
 import { WINDOW, MAX_LIMIT } from '../../env.js';
 
-const adminRoutes = Router();
+const QnARoutes = Router();
 
 const limiter = rateLimit({
   windowMs: WINDOW * 1000,
@@ -15,7 +15,13 @@ const limiter = rateLimit({
   },
 });
 
-adminRoutes.post('/login', [limiter], tryCatch(adminController.login));
-adminRoutes.get('/logout', [isAdmin, limiter], tryCatch(adminController.logout));
+QnARoutes.get(
+  '/restore-QnA',
+  [
+    limiter,
+    // isUser
+  ],
+  tryCatch(QnAController.restoreQnA),
+);
 
-export default adminRoutes;
+export default QnARoutes;

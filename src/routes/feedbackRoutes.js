@@ -1,11 +1,12 @@
 import { Router } from 'express';
 import { rateLimit } from 'express-rate-limit';
 import isAdmin from '../middlewares/isAdmin.js';
+import isUser from '../middlewares/isUser.js';
 import tryCatch from '../middlewares/tryCatch.js';
-import { adminController } from '../controllers/index.js';
+import { feedbackController } from '../controllers/index.js';
 import { WINDOW, MAX_LIMIT } from '../../env.js';
 
-const adminRoutes = Router();
+const feedbackRoutes = Router();
 
 const limiter = rateLimit({
   windowMs: WINDOW * 1000,
@@ -15,7 +16,7 @@ const limiter = rateLimit({
   },
 });
 
-adminRoutes.post('/login', [limiter], tryCatch(adminController.login));
-adminRoutes.get('/logout', [isAdmin, limiter], tryCatch(adminController.logout));
+feedbackRoutes.post('/create-feedback', [limiter, isUser], tryCatch(feedbackController.createFeedback));
+feedbackRoutes.get('/get-all-feedbacks', [limiter, isAdmin], tryCatch(feedbackController.getAllFeedback));
 
-export default adminRoutes;
+export default feedbackRoutes;
