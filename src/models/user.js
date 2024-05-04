@@ -9,7 +9,6 @@ const userSchema = new mongoose.Schema(
     last_name: {
       type: String,
       required: true,
-      unique: true,
     },
     email: {
       type: String,
@@ -32,6 +31,14 @@ const userSchema = new mongoose.Schema(
     bio: {
       type: String,
       default: '',
+    },
+    otp: {
+      token: { type: String },
+      otpTimestamp: { type: Date },
+    },
+    permissions: {
+      type: [String],
+      default: [],
     },
   },
   { timestamps: true },

@@ -1,7 +1,8 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { jwtDecode } from 'jwt-decode';
-import { SECRET } from '../../env.js';
+import nodemailer from 'nodemailer';
+import { EMAIL_USER, EMAIL_PASS, SECRET } from '../../env.js';
 
 export default {
   filterQuery: ({ query }) => ({
@@ -53,6 +54,46 @@ export default {
     const exp = new Date(decrypted.exp * 1000);
 
     return { iat, exp };
+  },
+
+  generateOTP: () => {
+    const length = 4;
+    const charset = '0123456789';
+    let otp = '';
+
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * charset.length);
+      otp += charset[randomIndex];
+    }
+
+    return otp;
+  },
+
+  sendEmail: async (email, name, otp) => {
+    const transporter = nodemailer.createTransport({
+      service: 'Gmail',
+      port: 465,
+      secure: true,
+      auth: {
+        user: EMAIL_USER,
+        pass: EMAIL_PASS,
+      },
+    });
+
+    const mailOptions = {
+      from: EMAIL_USER,
+      to: email,
+      subject: 'OTP for Your Account',
+      // eslint-disable-next-line max-len
+      text: `Dear ${name},\n\nYour One-Time Password (OTP) for your account is: ${otp}. Please use this OTP to proceed with your authentication process.\n\nIf you didn't request this OTP, please ignore this email.\n\nBest regards,\nThe Team`,
+    };
+
+    try {
+      await transporter.sendMail(mailOptions);
+      return true;
+    } catch (err) {
+      throw new Error(err.message);
+    }
   },
 
   getSorting: (sortingOrder, fieldName) => {
