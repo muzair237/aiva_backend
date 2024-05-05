@@ -1,0 +1,10 @@
+[
+    {
+        "route": "/chat",
+        "can": "chat.nav",
+        "description": "Can view the chat page",
+        "parent": [
+            "$"
+        ]
+    }
+]

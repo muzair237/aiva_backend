@@ -162,7 +162,7 @@ export default {
     }
 
     if (user?.otp?.token !== otp || user?.otp?.otpTimestamp < Date.now()) {
-      return res.send({ success: false, message: 'Invalid OTP or OTP has Expired!' });
+      return res.status(401).json({ success: false, message: 'Invalid OTP or OTP has Expired!' });
     }
     res.status(200).json({ success: true, message: 'OTP Verified Successfully!' });
   },

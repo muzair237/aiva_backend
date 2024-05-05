@@ -1,24 +1,8 @@
 [
   {
-    "route": "/chat",
-    "can": "chat.nav",
-    "description": "Can view the chat page",
-    "parent": [
-      "$"
-    ]
-  },
-  {
     "route": "/dashboard",
     "can": "dashboard.nav",
     "description": "Can view the dashboard page",
-    "parent": [
-      "$"
-    ]
-  },
-  {
-    "route": "/chat",
-    "can": "chat.nav",
-    "description": "Can view the chat page",
     "parent": [
       "$"
     ]
@@ -70,7 +54,8 @@
     "parent": [
       "permissions"
     ]
-  },{
+  },
+  {
     "route": "/roles/create-role",
     "description": "Can create new role",
     "can": "roles.create",

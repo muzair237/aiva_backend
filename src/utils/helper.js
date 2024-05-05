@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { jwtDecode } from 'jwt-decode';
 import nodemailer from 'nodemailer';
 import { EMAIL_USER, EMAIL_PASS, SECRET } from '../../env.js';
+import OTPEmailTemp from './templates/verifyOTP.js';
 
 export default {
   filterQuery: ({ query }) => ({
@@ -78,14 +79,20 @@ export default {
         user: EMAIL_USER,
         pass: EMAIL_PASS,
       },
+      tls: {
+        // do not fail on invalid certs
+        rejectUnauthorized: false,
+      },
     });
+
+    const message = OTPEmailTemp({ name, otp });
 
     const mailOptions = {
       from: EMAIL_USER,
       to: email,
       subject: 'OTP for Your Account',
       // eslint-disable-next-line max-len
-      text: `Dear ${name},\n\nYour One-Time Password (OTP) for your account is: ${otp}. Please use this OTP to proceed with your authentication process.\n\nIf you didn't request this OTP, please ignore this email.\n\nBest regards,\nThe Team`,
+      html: message,
     };
 
     try {
