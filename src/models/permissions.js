@@ -19,6 +19,11 @@ const permissionsSchema = new mongoose.Schema(
       type: [String],
       required: true,
     },
+    for: {
+      type: String,
+      enum: ['ADMIN', 'USER'],
+      required: true,
+    },
   },
   { timestamps: true },
 );

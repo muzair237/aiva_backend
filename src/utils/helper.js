@@ -16,6 +16,7 @@ export default {
     filterText:
       query.filterText !== 'null' && query.filterText !== 'undefined' && query.filterText ? query.filterText : '',
     sort: query.sort && query.sort !== 'undefined' && query.sort !== 'null' ? query.sort : '',
+    type: query.type && query.type !== 'undefined' && query.type !== 'null' && query.type !== 'all' ? query.type : '',
   }),
 
   pagination: (items, page, totalItems, itemsPerPage, getAll) => {

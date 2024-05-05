@@ -32,12 +32,17 @@ export default {
 
   getAllPermissions: async (req, res) => {
     // eslint-disable-next-line prefer-const
-    let { page, itemsPerPage, getAll, searchText, sort } = {
+    let { page, itemsPerPage, getAll, searchText, sort, type } = {
       ...req.query,
       ...helper.filterQuery(req),
     };
-    sort = sort && sort !== 'undefined' && sort !== 'null' ? sort : '';
     const query = { $and: [{}] };
+    console.log('TYPE: ', type);
+    if (type) {
+      query.$and.push({
+        for: type,
+      });
+    }
     if (searchText) {
       query.$and.push({
         $or: [
