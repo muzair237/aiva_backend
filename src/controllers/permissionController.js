@@ -3,9 +3,10 @@ import helper from '../utils/helper.js';
 
 export default {
   createPermission: async (req, res) => {
-    const { route, description, can, parent } = req.body;
+    console.log(req.body);
+    const { route, description, can, parent, group } = req.body;
 
-    if (!can || !route || !description || !parent) {
+    if (!can || !route || !description || !parent || !group) {
       return res.status(400).json({
         message: 'Invalid Information!',
         success: false,
@@ -17,58 +18,65 @@ export default {
         success: false,
       });
     }
-    await PERMISSIONS.create({
+    const permission = await PERMISSIONS.create({
       route,
       description,
       can: can.toLowerCase(),
       parent,
+      group,
     });
 
     return res.status(200).json({
       message: 'Permission Created Successfully',
       success: true,
+      permission,
     });
   },
 
   getAllPermissions: async (req, res) => {
-    // eslint-disable-next-line prefer-const
-    let { page, itemsPerPage, getAll, searchText, sort, type } = {
+    const { page, itemsPerPage, getAll, startDate, endDate, searchText, sort, type } = {
       ...req.query,
       ...helper.filterQuery(req),
     };
-    const query = { $and: [{}] };
-    console.log('TYPE: ', type);
+
+    const query = {};
+
     if (type) {
-      query.$and.push({
-        for: type,
-      });
+      query.for = type;
     }
+
     if (searchText) {
-      query.$and.push({
-        $or: [
-          { can: { $regex: searchText, $options: 'i' } },
-          { route: { $regex: searchText, $options: 'i' } },
-          { description: { $regex: searchText, $options: 'i' } },
-        ],
-      });
+      query.$or = [
+        { can: { $regex: searchText, $options: 'i' } },
+        { route: { $regex: searchText, $options: 'i' } },
+        { description: { $regex: searchText, $options: 'i' } },
+      ];
+    }
+
+    if (startDate && endDate) {
+      query.created_at = {
+        $gte: new Date(startDate),
+        $lte: new Date(endDate),
+      };
     }
 
     const sorting = helper.getSorting(sort, 'can');
 
     const count = await PERMISSIONS.countDocuments(query);
-    if (getAll === 'true') {
-      page = 1;
-      itemsPerPage = count;
+
+    let finalQuery = PERMISSIONS.find();
+
+    if (Object.keys(query).length > 0) {
+      finalQuery = finalQuery.where(query);
     }
-    // if (parentOnly === 'true') {
-    //   page = 1;
-    //   itemsPerPage = count;
-    //   query.$and.push({ parent: { $eq: '$' } });
-    // }
-    const permissions = await PERMISSIONS.find(query)
-      .skip((page - 1) * itemsPerPage)
-      .limit(itemsPerPage)
-      .sort(sorting);
+
+    if (getAll === 'true') {
+      finalQuery = finalQuery.skip(0).limit(count);
+    } else {
+      finalQuery = finalQuery.skip((page - 1) * itemsPerPage).limit(itemsPerPage);
+    }
+
+    const permissions = await finalQuery.sort(sorting);
 
     return res.status(200).json({
       success: true,

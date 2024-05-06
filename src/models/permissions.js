@@ -19,7 +19,7 @@ const permissionsSchema = new mongoose.Schema(
       type: [String],
       required: true,
     },
-    for: {
+    group: {
       type: String,
       enum: ['ADMIN', 'USER'],
       required: true,
