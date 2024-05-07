@@ -3,7 +3,6 @@ import helper from '../utils/helper.js';
 
 export default {
   createPermission: async (req, res) => {
-    console.log(req.body);
     const { route, description, can, parent, group } = req.body;
 
     if (!can || !route || !description || !parent || !group) {
@@ -38,11 +37,10 @@ export default {
       ...req.query,
       ...helper.filterQuery(req),
     };
-
     const query = {};
 
     if (type) {
-      query.for = type;
+      query.group = type;
     }
 
     if (searchText) {
@@ -54,7 +52,7 @@ export default {
     }
 
     if (startDate && endDate) {
-      query.created_at = {
+      query.createdAt = {
         $gte: new Date(startDate),
         $lte: new Date(endDate),
       };
@@ -122,7 +120,7 @@ export default {
 
   deletePermission: async (req, res) => {
     const { id } = req.params;
-    await PERMISSIONS.findByIdAndDelete(id);
+    const deletedPermission = await PERMISSIONS.findByIdAndDelete(id);
     await ROLES.updateMany(
       {
         permissions: { $in: [id] },
@@ -132,6 +130,7 @@ export default {
     return res.status(200).json({
       success: true,
       message: 'Permission deleted successfully',
+      deletedPermission,
     });
   },
 };

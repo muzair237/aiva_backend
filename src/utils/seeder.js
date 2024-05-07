@@ -20,7 +20,7 @@ export default async function seedPRU() {
         type: 'SUPER_ADMIN',
         description: 'Role for Super Admin',
         permissions: permissions
-          .filter(permission => permission.for === 'ADMIN')
+          .filter(permission => permission.group === 'ADMIN')
           .map(({ _id }) => new mongoose.Types.ObjectId(_id)),
       },
     },
@@ -33,7 +33,7 @@ export default async function seedPRU() {
           type: 'USER',
           description: 'Role for User',
           permissions: permissions
-            .filter(permission => permission.for === 'USER')
+            .filter(permission => permission.group === 'USER')
             .map(({ _id }) => new mongoose.Types.ObjectId(_id)),
         },
       },
@@ -51,7 +51,7 @@ export default async function seedPRU() {
         email: 'admin@aiva.com',
         password: helper.hashPassword('1@2.comM'),
         role: 'SUPER_ADMIN',
-        permissions: permissions.filter(permission => permission.for === 'ADMIN').map(({ can }) => can),
+        permissions: permissions.filter(permission => permission.group === 'ADMIN').map(({ can }) => can),
       },
     },
     { upsert: true },
