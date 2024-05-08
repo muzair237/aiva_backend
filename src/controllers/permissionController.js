@@ -95,7 +95,7 @@ export default {
 
   updatePermission: async (req, res, next) => {
     const { id } = req.params;
-    const { route, description, can, parent } = req.body;
+    const { route, description, can, parent, group } = req.body;
     if (!can || !route || !description || !parent) {
       return res.status(400).json({
         success: false,
@@ -110,7 +110,7 @@ export default {
       });
     }
     await PERMISSIONS.findByIdAndUpdate(id, {
-      $set: { route, description, can, parent },
+      $set: { route, description, can, parent, group },
     });
     return res.status(200).json({
       success: true,

@@ -12,7 +12,6 @@ export default async function seedPRU() {
 
   console.log('Seeding Role...');
   const permissions = await PERMISSIONS.find({});
-  // const permissionsIds = ;
   await ROLES.updateOne(
     { type: 'SUPER_ADMIN' },
     {
