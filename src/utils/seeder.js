@@ -12,16 +12,37 @@ export default async function seedPRU() {
 
   console.log('Seeding Role...');
   const permissions = await PERMISSIONS.find({});
-  const permissionsIds = permissions.map(({ id }) => mongoose.Types.ObjectId.createFromHexString(id));
+  // const permissionsIds = ;
   await ROLES.updateOne(
     { type: 'SUPER_ADMIN' },
-    { $set: { type: 'SUPER_ADMIN', description: 'Role for Super Admin', permissions: permissionsIds } },
+    {
+      $set: {
+        type: 'SUPER_ADMIN',
+        description: 'Role for Super Admin',
+        permissions: permissions
+          .filter(permission => permission.for === 'ADMIN')
+          .map(({ _id }) => new mongoose.Types.ObjectId(_id)),
+      },
+    },
     { upsert: true },
-  );
+  ),
+    await ROLES.updateOne(
+      { type: 'USER' },
+      {
+        $set: {
+          type: 'USER',
+          description: 'Role for User',
+          permissions: permissions
+            .filter(permission => permission.for === 'USER')
+            .map(({ _id }) => new mongoose.Types.ObjectId(_id)),
+        },
+      },
+      { upsert: true },
+    );
   console.log('Role Seeded Successfully!');
 
   console.log('Seeding User...');
-  const permissionsCan = permissions.map(({ can }) => can);
+  // const permissionsCan = ;
   await ADMIN.updateOne(
     { email: 'admin@aiva.com' },
     {
@@ -30,7 +51,7 @@ export default async function seedPRU() {
         email: 'admin@aiva.com',
         password: helper.hashPassword('1@2.comM'),
         role: 'SUPER_ADMIN',
-        permissions: permissionsCan,
+        permissions: permissions.filter(permission => permission.for === 'ADMIN').map(({ can }) => can),
       },
     },
     { upsert: true },

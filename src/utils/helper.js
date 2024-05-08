@@ -1,7 +1,9 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { jwtDecode } from 'jwt-decode';
-import { SECRET } from '../../env.js';
+import nodemailer from 'nodemailer';
+import { EMAIL_USER, EMAIL_PASS, SECRET } from '../../env.js';
+import OTPEmailTemp from './templates/verifyOTP.js';
 
 export default {
   filterQuery: ({ query }) => ({
@@ -14,6 +16,7 @@ export default {
     filterText:
       query.filterText !== 'null' && query.filterText !== 'undefined' && query.filterText ? query.filterText : '',
     sort: query.sort && query.sort !== 'undefined' && query.sort !== 'null' ? query.sort : '',
+    type: query.type && query.type !== 'undefined' && query.type !== 'null' && query.type !== 'all' ? query.type : '',
   }),
 
   pagination: (items, page, totalItems, itemsPerPage, getAll) => {
@@ -53,6 +56,52 @@ export default {
     const exp = new Date(decrypted.exp * 1000);
 
     return { iat, exp };
+  },
+
+  generateOTP: () => {
+    const length = 4;
+    const charset = '0123456789';
+    let otp = '';
+
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * charset.length);
+      otp += charset[randomIndex];
+    }
+
+    return otp;
+  },
+
+  sendEmail: async (email, name, otp) => {
+    const transporter = nodemailer.createTransport({
+      service: 'Gmail',
+      port: 465,
+      secure: true,
+      auth: {
+        user: EMAIL_USER,
+        pass: EMAIL_PASS,
+      },
+      tls: {
+        // do not fail on invalid certs
+        rejectUnauthorized: false,
+      },
+    });
+
+    const message = OTPEmailTemp({ name, otp });
+
+    const mailOptions = {
+      from: EMAIL_USER,
+      to: email,
+      subject: 'OTP for Your Account',
+      // eslint-disable-next-line max-len
+      html: message,
+    };
+
+    try {
+      await transporter.sendMail(mailOptions);
+      return true;
+    } catch (err) {
+      throw new Error(err.message);
+    }
   },
 
   getSorting: (sortingOrder, fieldName) => {

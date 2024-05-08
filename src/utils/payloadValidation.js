@@ -25,6 +25,10 @@ export const validateSignUpPayload = payload => {
           'Password must contain at least one lowercase letter, one uppercase letter, one digit, and one special character.',
         'any.required': 'Password is required',
       }),
+    newPassword: Joi.string().required().valid(Joi.ref('password')).messages({
+      'any.required': 'New password is required',
+      'any.only': 'Both passwords needs to be the same',
+    }),
     DOB: Joi.date().required().messages({
       'date.base': 'Date of Birth must be a valid date',
       'any.required': 'Date of Birth is required',
