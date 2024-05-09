@@ -18,6 +18,9 @@ const limiter = rateLimit({
 
 userRoutes.post('/login', [limiter], tryCatch(userController.login));
 userRoutes.post('/signUp', [limiter], tryCatch(userController.signUp));
+userRoutes.post('/send-otp', [limiter], tryCatch(userController.sendOTP));
+userRoutes.post('/verify-otp', [limiter], tryCatch(userController.verifyOTP));
+userRoutes.post('/update-password', [limiter], tryCatch(userController.updatePassword));
 userRoutes.get('/get-all-users', [limiter, isAdmin], tryCatch(userController.getAllUsers));
 userRoutes.get('/logout', [limiter, isUser], tryCatch(userController.logout));
 

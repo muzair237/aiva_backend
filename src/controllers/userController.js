@@ -1,4 +1,4 @@
-import { USER, USER_JWT, ROLES } from '../models/index.js';
+import { USER, USER_JWT, ROLES, PERMISSIONS } from '../models/index.js';
 import { validateSignUpPayload } from '../utils/payloadValidation.js';
 import helper from '../utils/helper.js';
 
@@ -59,17 +59,40 @@ export default {
 
     const hashedPassword = helper.hashPassword(user?.password);
 
-    const role = await ROLES.findOne({ type: 'USER' }).select('_id');
+    const role = await ROLES.findOne({ type: 'USER' });
 
-    await USER.create({
+    const permissions = await PERMISSIONS.find({ _id: { $in: role?.permissions } });
+    const permissionsIds = permissions.map(({ can }) => can);
+
+    let newUser = await USER.create({
       ...user,
-      role,
+      role: role?._id,
       password: hashedPassword,
+      permissions: permissionsIds,
     });
+    newUser = newUser.toObject();
+    delete newUser.password;
 
-    return res.status(201).json({ success: true, message: 'Signed Up Successfully!' });
+    const token = helper.generateJWTToken({ id: newUser?._id, email: newUser?.email });
+    const { iat, exp } = helper.decryptToken(token);
+    await USER_JWT.findOneAndUpdate(
+      {
+        user_id: newUser?._id,
+      },
+      {
+        user_id: newUser?._id,
+        token,
+        iat,
+        exp,
+      },
+      {
+        upsert: true,
+      },
+    );
+
+    return res.status(201).json({ success: true, message: 'Signed Up Successfully!', user: newUser, token });
   },
-  
+
   getAllUsers: async (req, res) => {
     const { page, itemsPerPage, getAll, searchText, sort } = {
       ...req.query,
@@ -105,5 +128,59 @@ export default {
       message: 'Users Retrieved Successfully!',
       ...helper.pagination(users, +page, totalUsers, +itemsPerPage, getAll),
     });
+  },
+
+  sendOTP: async (req, res) => {
+    const { email } = req.body;
+    const user = await USER.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ status: false, message: 'Invalid User' });
+    }
+
+    const otp = helper.generateOTP();
+    // eslint-disable-next-line no-mixed-operators
+    const otpTimestamp = new Date(Date.now() + 5 * 60 * 1000);
+
+    user.otp = {
+      token: otp,
+      otpTimestamp,
+    };
+    await user.save();
+
+    await helper.sendEmail(email, `${user?.first_name} ${user?.last_name}`, otp);
+    return res.status(200).json({ success: true, message: 'OTP Sent Successfully to your Email!' });
+  },
+
+  verifyOTP: async (req, res) => {
+    const { email, otp } = req.body;
+
+    const user = await USER.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'Invalid User!' });
+    }
+
+    if (user?.otp?.token !== otp || user?.otp?.otpTimestamp < Date.now()) {
+      return res.status(401).json({ success: false, message: 'Invalid OTP or OTP has Expired!' });
+    }
+    res.status(200).json({ success: true, message: 'OTP Verified Successfully!' });
+  },
+
+  updatePassword: async (req, res) => {
+    const { email, newPassword } = req.body;
+
+    const user = await USER.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'Invalid User!' });
+    }
+
+    const hashedPassword = helper.hashPassword(newPassword);
+    user.password = hashedPassword;
+    user.otp.token = null;
+    await user.save();
+
+    res.status(200).json({ success: true, message: 'Password Updated Successfully!' });
   },
 };
