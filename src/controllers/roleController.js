@@ -9,7 +9,6 @@ export default {
 
     if (isPresent) {
       return res.status(409).json({
-        code: 409,
         message: 'Role exists with this same type',
         success: false,
       });
@@ -17,7 +16,6 @@ export default {
 
     if (!type || !description || !permissions) {
       return res.status(400).json({
-        code: 400,
         message: 'Data is invalid',
         success: false,
       });
