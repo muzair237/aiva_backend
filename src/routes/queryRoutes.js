@@ -2,10 +2,10 @@ import { Router } from 'express';
 import { rateLimit } from 'express-rate-limit';
 import isAdmin from '../middlewares/isAdmin.js';
 import tryCatch from '../middlewares/tryCatch.js';
-import { userQuery } from '../controllers/index.js';
+import { queryController } from '../controllers/index.js';
 import { WINDOW, MAX_LIMIT } from '../../env.js';
 
-const adminRoutes = Router();
+const queryRoutes = Router();
 
 const limiter = rateLimit({
   windowMs: WINDOW * 1000,
@@ -15,6 +15,6 @@ const limiter = rateLimit({
   },
 });
 
-adminRoutes.post('/query', [limiter], tryCatch(userQuery.query));
+queryRoutes.get('/query', [limiter], tryCatch(queryController.askQuery));
 
-export default adminRoutes;
+export default queryRoutes;
