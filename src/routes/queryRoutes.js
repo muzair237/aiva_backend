@@ -1,6 +1,10 @@
 import { Router } from 'express';
 import { rateLimit } from 'express-rate-limit';
+<<<<<<< HEAD
 import isAdmin from '../middlewares/isAdmin.js';
+=======
+import isUser from '../middlewares/isUser.js';
+>>>>>>> 9e73c4295a0c3aea6fc46aebfa219e10fce6238f
 import tryCatch from '../middlewares/tryCatch.js';
 import { queryController } from '../controllers/index.js';
 import { WINDOW, MAX_LIMIT } from '../../env.js';
@@ -15,6 +19,13 @@ const limiter = rateLimit({
   },
 });
 
-queryRoutes.get('/query', [limiter], tryCatch(queryController.askQuery));
+queryRoutes.post(
+  '/ask-query',
+  [
+    // isUser,
+    limiter,
+  ],
+  tryCatch(queryController.askQuery),
+);
 
 export default queryRoutes;
