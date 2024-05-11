@@ -17,5 +17,10 @@ const limiter = rateLimit({
 
 adminRoutes.post('/login', [limiter], tryCatch(adminController.login));
 adminRoutes.get('/logout', [isAdmin, limiter], tryCatch(adminController.logout));
+adminRoutes.get('/get-all-admins', [isAdmin, limiter], tryCatch(adminController.getAllAdmins));
+adminRoutes.get('/get-unique-roles', [isAdmin, limiter], tryCatch(adminController.getUniqueRoles));
+adminRoutes.post('/create-admin', [isAdmin, limiter], tryCatch(adminController.createAdmin));
+adminRoutes.put('/update-admin/:id', [isAdmin, limiter], tryCatch(adminController.updateAdmin));
+adminRoutes.delete('/delete-admin/:id', [isAdmin, limiter], tryCatch(adminController.deleteAdmin));
 
 export default adminRoutes;

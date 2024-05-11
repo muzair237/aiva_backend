@@ -81,7 +81,7 @@ export default {
   updateRole: async (req, res) => {
     const { id } = req.params;
 
-    const adminWithThisRole = await ADMIN.find({ roles: { $in: id } }).select('_id');
+    const adminWithThisRole = await ADMIN.find({ roles: { $in: [id] } }).select('_id');
 
     const { type, description, permissions } = req.body;
 

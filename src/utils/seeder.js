@@ -40,8 +40,9 @@ export default async function seedPRU() {
     );
   console.log('Role Seeded Successfully!');
 
-  console.log('Seeding User...');
+  console.log('Seeding Admin...');
   // const permissionsCan = ;
+  const roles = await ROLES.find({ type: 'SUPER_ADMIN' });
   await ADMIN.updateOne(
     { email: 'admin@aiva.com' },
     {
@@ -49,8 +50,8 @@ export default async function seedPRU() {
         name: 'Admin',
         email: 'admin@aiva.com',
         password: helper.hashPassword('1@2.comM'),
-        role: 'SUPER_ADMIN',
-        permissions: permissions.filter(permission => permission.group === 'ADMIN').map(({ can }) => can),
+        roles: [roles[0]._id],
+        permissions: permissions?.map(({ can }) => can),
       },
     },
     { upsert: true },

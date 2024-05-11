@@ -11,7 +11,6 @@ import seedPRU from './utils/seeder.js';
 import routes from './routes/index.js';
 
 const allowedOrigins = [FRONTEND_ADMIN_URL, FRONTEND_USER_URL];
-console.log(FRONTEND_ADMIN_URL, FRONTEND_USER_URL);
 mongoose
   .connect(MONGO_STRING)
   .then(() => {
