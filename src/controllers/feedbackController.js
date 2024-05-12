@@ -9,17 +9,24 @@ export default {
   },
 
   getAllFeedback: async (req, res) => {
-    const { page, itemsPerPage, getAll, searchText, sort } = {
+    const { page, itemsPerPage, startDate, endDate, getAll, searchText, sort } = {
       ...req.query,
       ...helper.filterQuery(req),
     };
 
-    const query = {
-      $and: [],
-    };
-    query.$and.push({
-      $or: [{ comment: { $regex: new RegExp(searchText, 'i') } }],
-    });
+    const query = {};
+
+    if (searchText) {
+      query.$or = [{ feedback: { $regex: searchText, $options: 'i' } }];
+    }
+
+    if (startDate && endDate) {
+      const start = new Date(startDate);
+      start.setHours(0, 0, 0, 0);
+      const end = new Date(endDate);
+      end.setHours(23, 59, 59, 999);
+      query.createdAt = { $gte: start, $lt: end };
+    }
 
     const sortOptions = helper.getSorting(sort, 'comment');
 
@@ -28,7 +35,6 @@ export default {
     let feedbacks = [];
     feedbacks = await FEEDBACK.find(query)
       .lean()
-      .collation({ locale: 'en', strength: 2 })
       .sort(sortOptions)
       .skip((+page - 1) * +itemsPerPage)
       .limit(+itemsPerPage)

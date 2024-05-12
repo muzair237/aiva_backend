@@ -45,6 +45,15 @@
     ]
   },
   {
+    "route": "/feedbacks",
+    "description": "Can View the feedbacks page",
+    "can": "feedbacks.nav",
+    "group": "ADMIN",
+    "parent": [
+      "$"
+    ]
+  },
+  {
     "route": "/permissions/create-permission",
     "description": "Can create new permission",
     "can": "permissions.create",
