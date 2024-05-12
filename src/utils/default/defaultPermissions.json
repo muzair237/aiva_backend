@@ -36,6 +36,15 @@
     ]
   },
   {
+    "route": "/users",
+    "description": "Can View the users page",
+    "can": "users.nav",
+    "group": "ADMIN",
+    "parent": [
+      "$"
+    ]
+  },
+  {
     "route": "/permissions/create-permission",
     "description": "Can create new permission",
     "can": "permissions.create",
