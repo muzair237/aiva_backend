@@ -1,3 +1,4 @@
+import { USER } from '../models/index.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { jwtDecode } from 'jwt-decode';
@@ -117,5 +118,21 @@ export default {
       default:
         return { created_at: -1 };
     }
+  },
+
+  filterUsers: async searchText => {
+    const myQuery = {
+      $or: [
+        {
+          $expr: {
+            $regexMatch: { input: { $concat: ['$first_name', ' ', '$last_name'] }, regex: new RegExp(searchText, 'i') },
+          },
+        },
+        { email: { $regex: searchText, $options: 'i' } },
+      ],
+    };
+
+    const usersFilter = await USER.find(myQuery).select('_id');
+    return usersFilter.map(e => e._id);
   },
 };
