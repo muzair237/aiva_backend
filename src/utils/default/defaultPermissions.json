@@ -54,6 +54,15 @@
     ]
   },
   {
+    "route": "/qna",
+    "description": "Can View the qna page",
+    "can": "qna.nav",
+    "group": "ADMIN",
+    "parent": [
+      "$"
+    ]
+  },
+  {
     "route": "/permissions/create-permission",
     "description": "Can create new permission",
     "can": "permissions.create",
@@ -141,6 +150,33 @@
     "group": "ADMIN",
     "parent": [
       "admins"
+    ]
+  },
+  {
+    "route": "/qna/create-question",
+    "description": "Can Create a question",
+    "can": "qna.create",
+    "group": "ADMIN",
+    "parent": [
+      "qna"
+    ]
+  },
+  {
+    "route": "/qna/edit-question",
+    "description": "Can Edit a question",
+    "can": "qna.edit",
+    "group": "ADMIN",
+    "parent": [
+      "qna"
+    ]
+  },
+  {
+    "route": "/qna/delete-question",
+    "description": "Can Delete a question",
+    "can": "qna.delete",
+    "group": "ADMIN",
+    "parent": [
+      "qna"
     ]
   },
   {
