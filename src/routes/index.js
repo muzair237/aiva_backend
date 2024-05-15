@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import dashboardRoutes from './dashboardRoutes.js';
 import adminRoutes from './adminRoutes.js';
 import permissionRoutes from './permissionRoutes.js';
 import roleRoutes from './roleRoutes.js';
@@ -9,6 +10,7 @@ import queryRoutes from './queryRoutes.js';
 
 const router = Router();
 
+router.use('/dashboard', dashboardRoutes);
 router.use('/admin', adminRoutes);
 router.use('/userQuery', QnARoutes);
 router.use('/permission', permissionRoutes);

@@ -24,7 +24,6 @@ export default {
         { question: { $regex: searchText, $options: 'i' } },
         { answer: { $regex: searchText, $options: 'i' } },
         { keywords: { $in: [new RegExp(searchText, 'i')] } },
-
       ];
     }
 
@@ -50,5 +49,62 @@ export default {
       success: true,
       ...helper.pagination(admins, page, count, itemsPerPage),
     });
+  },
+
+  createQuestion: async (req, res) => {
+    const { question, answer, keywords } = req.body;
+
+    if (!question || !answer || !keywords) {
+      return res.status(400).json({ error: 'Question, answer, and keywords are required fields!' });
+    }
+
+    const newQuestion = await QnA.create({
+      question,
+      answer,
+      keywords,
+    });
+
+    return res.status(201).json({ message: 'Question Created Successfully!', question: newQuestion });
+  },
+
+  updateQuestion: async (req, res) => {
+    const { id } = req.params;
+    const { question, answer, keywords } = req.body;
+
+    if (!question || !answer || !keywords) {
+      return res.status(400).json({ error: 'Question, answer, and keywords are required fields.' });
+    }
+
+    const existingQuestion = await QnA.findById(id);
+
+    if (!existingQuestion) {
+      return res.status(404).json({ error: 'Question not found.' });
+    }
+
+    existingQuestion.question = question;
+    existingQuestion.answer = answer;
+    existingQuestion.keywords = keywords;
+
+    await existingQuestion.save();
+
+    return res.status(200).json({ message: 'Question Updated Successfully.' });
+  },
+
+  deleteQuestion: async (req, res) => {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ error: 'Question ID is required.' });
+    }
+
+    const existingQuestion = await QnA.findById(id);
+
+    if (!existingQuestion) {
+      return res.status(404).json({ error: 'Question Not Found!' });
+    }
+
+    await QnA.findByIdAndDelete(id);
+
+    return res.status(200).json({ message: 'Question Deleted Successfully!' });
   },
 };

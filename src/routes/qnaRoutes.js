@@ -25,5 +25,8 @@ QnARoutes.get(
   tryCatch(QnAController.restoreQnA),
 );
 QnARoutes.get('/get-all-questions', [limiter, isAdmin], tryCatch(QnAController.getAllQuestions));
+QnARoutes.post('/create-question', [limiter, isAdmin], tryCatch(QnAController.createQuestion));
+QnARoutes.put('/update-question/:id', [limiter, isAdmin], tryCatch(QnAController.updateQuestion));
+QnARoutes.delete('/delete-question/:id', [limiter, isAdmin], tryCatch(QnAController.deleteQuestion));
 
 export default QnARoutes;

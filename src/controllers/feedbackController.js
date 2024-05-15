@@ -4,7 +4,6 @@ import helper from '../utils/helper.js';
 export default {
   createFeedback: async (req, res) => {
     const feedback = req.body;
-    console.log(feedback);
     if (!feedback?.user_id || !feedback?.feedback) {
       return res.status(422).json({ success: false, message: 'Invalid Data!' });
     }
