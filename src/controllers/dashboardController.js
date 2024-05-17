@@ -1,4 +1,4 @@
-import { USER, QnA } from '../models/index.js';
+import { USER, QnA, FEEDBACK } from '../models/index.js';
 import helper from '../utils/helper.js';
 
 export default {
@@ -20,12 +20,31 @@ export default {
 
     const numOfUsers = await USER.countDocuments(query);
     const numOfStoredQuestions = await QnA.countDocuments(query);
-    const numOfAdmins = await USER.countDocuments(query);
+    const numOfFeedbacks = await FEEDBACK.countDocuments(query);
+
+    const analytics = [
+      { label: 'No. of Registered Users', value: numOfUsers, icon: 'ri-user-line' },
+      {
+        label: 'No. of Stored Questions',
+        value: numOfStoredQuestions,
+        icon: 'ri-questionnaire-line',
+      },
+      {
+        label: 'No. of Queries Asked',
+        value: numOfStoredQuestions,
+        icon: 'ri-question-answer-line',
+      },
+      {
+        label: 'No. of Feedbacks Received',
+        value: numOfFeedbacks,
+        icon: 'ri-feedback-line',
+      },
+    ];
 
     return res.status(200).json({
       success: true,
       message: 'Dashboard Cards Retrieved Successfully!',
-      analytics: { numOfUsers, numOfStoredQuestions, numOfAdmins },
+      analytics,
     });
   },
 };
