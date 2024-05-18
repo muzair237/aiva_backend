@@ -36,7 +36,7 @@ app.get('/api/seed-PRU', (req, res) => {
   seedPRU();
   return res.json({ message: 'Permissions, Roles and Admins Seeded Successfully!' });
 });
-app.get('/api/health', (req, res) => {
+app.get('/', (req, res) => {
   res.status(200).send('OK!');
 });
 
