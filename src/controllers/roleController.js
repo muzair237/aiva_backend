@@ -62,9 +62,9 @@ export default {
       query.createdAt = { $gte: start, $lt: end };
     }
 
-    const count = await ROLES.countDocuments(query);
-
     const sorting = helper.getSorting(sort, 'type');
+    
+    const count = await ROLES.countDocuments(query);
 
     const roles = await ROLES.find(query)
       .skip((page - 1) * itemsPerPage)

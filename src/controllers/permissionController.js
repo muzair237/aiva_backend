@@ -63,20 +63,15 @@ export default {
 
     const count = await PERMISSIONS.countDocuments(query);
 
-    let finalQuery = PERMISSIONS.find();
-
-    if (Object.keys(query).length > 0) {
-      finalQuery = finalQuery.where(query);
-    }
-
     if (getAll === 'true') {
-      finalQuery = finalQuery.skip(0).limit(count);
-    } else {
-      finalQuery = finalQuery.skip((page - 1) * itemsPerPage).limit(itemsPerPage);
+      page = 1;
+      itemsPerPage = count;
     }
 
-    const permissions = await finalQuery.sort(sorting);
-
+    const permissions = await PERMISSIONS.find(query)
+      .skip((page - 1) * itemsPerPage)
+      .limit(itemsPerPage)
+      .sort(sorting);
     return res.status(200).json({
       success: true,
       message: 'Permissions fetched successfully',

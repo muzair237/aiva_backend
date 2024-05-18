@@ -31,7 +31,7 @@ export default {
       },
       {
         label: 'No. of Queries Asked',
-        value: numOfStoredQuestions,
+        value: 0,
         icon: 'ri-question-answer-line',
       },
       {
