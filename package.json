@@ -3,11 +3,11 @@
   "type": "module",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "env-cmd -e development nodemon start src/app.js",
-    "start": "env-cmd -e production nodemon start src/app.js",
+    "dev": "env-cmd -e development nodemon start src/index.js",
+    "start": "env-cmd -e production nodemon start src/index.js",
     "lint:js": "eslint --ext jsx,js src/",
     "format": "prettier --write \"src/**/*.{js,ts,json,md}\""
   },
