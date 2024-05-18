@@ -6,11 +6,18 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import cors from 'cors';
 import mongoose from 'mongoose';
-import { FRONTEND_ADMIN_URL, FRONTEND_USER_URL, MONGO_STRING, PORT } from '../env.js';
+import {
+  FRONTEND_ADMIN_URL,
+  FRONTEND_USER_URL,
+  FRONTEND_ADMIN_LOCAL_URL,
+  FRONTEND_USER_LOCAL_URL,
+  MONGO_STRING,
+  PORT,
+} from '../env.js';
 import seedPRU from './utils/seeder.js';
 import routes from './routes/index.js';
 
-const allowedOrigins = [FRONTEND_ADMIN_URL, FRONTEND_USER_URL];
+const allowedOrigins = [FRONTEND_ADMIN_URL, FRONTEND_USER_URL, FRONTEND_ADMIN_LOCAL_URL, FRONTEND_USER_LOCAL_URL];
 mongoose
   .connect(MONGO_STRING)
   .then(() => {
