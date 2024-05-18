@@ -32,6 +32,9 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(morgan(':date[iso] - :req[X-Real-IP] - :method - :url - :status - :response-time ms'));
 app.use('/api', routes);
+app.get('/health', (req, res) => {
+  return res.send('Working!');
+});
 app.get('/api/seed-PRU', (req, res) => {
   seedPRU();
   return res.json({ message: 'Permissions, Roles and Admins Seeded Successfully!' });
