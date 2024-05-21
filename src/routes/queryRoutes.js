@@ -15,13 +15,7 @@ const limiter = rateLimit({
   },
 });
 
-queryRoutes.post(
-  '/ask-query',
-  [
-    // isUser,
-    limiter,
-  ],
-  tryCatch(queryController.askQuery),
-);
+queryRoutes.post('/ask-query', [isUser, limiter], tryCatch(queryController.askQuery));
+queryRoutes.get('/get-chat/:id', [isUser, limiter], tryCatch(queryController.getChat));
 
 export default queryRoutes;

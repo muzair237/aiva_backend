@@ -6,5 +6,6 @@ import QnA from './qna.js';
 import USER from './user.js';
 import USER_JWT from './user_jwt.js';
 import FEEDBACK from './feedback.js';
+import MESSAGE from './message.js';
 
-export { PERMISSIONS, ROLES, ADMIN, ADMIN_JWT, QnA, USER, USER_JWT, FEEDBACK };
+export { PERMISSIONS, ROLES, ADMIN, ADMIN_JWT, QnA, USER, USER_JWT, FEEDBACK, MESSAGE };
