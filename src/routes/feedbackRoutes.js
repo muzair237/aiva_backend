@@ -16,7 +16,7 @@ const limiter = rateLimit({
   },
 });
 
-feedbackRoutes.post('/create-feedback', [limiter, isUser], tryCatch(feedbackController.createFeedback));
+feedbackRoutes.post('/create-feedback', [limiter], tryCatch(feedbackController.createFeedback));
 feedbackRoutes.get('/get-all-feedbacks', [limiter, isAdmin], tryCatch(feedbackController.getAllFeedback));
 
 export default feedbackRoutes;

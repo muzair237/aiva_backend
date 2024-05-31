@@ -94,21 +94,33 @@ export default {
   },
 
   getAllUsers: async (req, res) => {
-    const { page, itemsPerPage, getAll, searchText, sort } = {
+    const { page, itemsPerPage, startDate, endDate, getAll, searchText, sort } = {
       ...req.query,
       ...helper.filterQuery(req),
     };
 
-    const query = {
-      $and: [],
-    };
-    query.$and.push({
-      $or: [
-        { first_name: { $regex: new RegExp(searchText, 'i') } },
-        { last_name: { $regex: new RegExp(searchText, 'i') } },
-        { email: { $regex: new RegExp(searchText, 'i') } },
-      ],
-    });
+    const query = {};
+
+    if (searchText) {
+      query.$or = [
+        { first_name: { $regex: searchText, $options: 'i' } },
+        { last_name: { $regex: searchText, $options: 'i' } },
+        {
+          $expr: {
+            $regexMatch: { input: { $concat: ['$first_name', ' ', '$last_name'] }, regex: new RegExp(searchText, 'i') },
+          },
+        },
+        { email: { $regex: searchText, $options: 'i' } },
+      ];
+    }
+
+    if (startDate && endDate) {
+      const start = new Date(startDate);
+      start.setHours(0, 0, 0, 0);
+      const end = new Date(endDate);
+      end.setHours(23, 59, 59, 999);
+      query.createdAt = { $gte: start, $lt: end };
+    }
 
     const sortOptions = helper.getSorting(sort, 'first_name');
 
@@ -117,7 +129,6 @@ export default {
     let users = [];
     users = await USER.find(query)
       .lean()
-      .collation({ locale: 'en', strength: 2 })
       .sort(sortOptions)
       .skip((+page - 1) * +itemsPerPage)
       .limit(+itemsPerPage)

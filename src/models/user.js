@@ -28,10 +28,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: '',
     },
-    bio: {
-      type: String,
-      default: '',
-    },
     otp: {
       token: { type: String },
       otpTimestamp: { type: Date },

@@ -3,7 +3,7 @@
     "route": "/dashboard",
     "can": "dashboard.nav",
     "description": "Can view the dashboard page",
-    "for": "ADMIN",
+    "group": "ADMIN",
     "parent": [
       "$"
     ]
@@ -12,7 +12,7 @@
     "route": "/permissions",
     "description": "Can view the permissions page",
     "can": "permissions.nav",
-    "for": "ADMIN",
+    "group": "ADMIN",
     "parent": [
       "$"
     ]
@@ -21,7 +21,7 @@
     "route": "/roles",
     "description": "Can view the roles page",
     "can": "roles.nav",
-    "for": "ADMIN",
+    "group": "ADMIN",
     "parent": [
       "$"
     ]
@@ -30,7 +30,34 @@
     "route": "/admins",
     "description": "Can View the admins page",
     "can": "admins.nav",
-    "for": "ADMIN",
+    "group": "ADMIN",
+    "parent": [
+      "$"
+    ]
+  },
+  {
+    "route": "/users",
+    "description": "Can View the users page",
+    "can": "users.nav",
+    "group": "ADMIN",
+    "parent": [
+      "$"
+    ]
+  },
+  {
+    "route": "/feedbacks",
+    "description": "Can View the feedbacks page",
+    "can": "feedbacks.nav",
+    "group": "ADMIN",
+    "parent": [
+      "$"
+    ]
+  },
+  {
+    "route": "/qna",
+    "description": "Can View the qna page",
+    "can": "qna.nav",
+    "group": "ADMIN",
     "parent": [
       "$"
     ]
@@ -39,7 +66,7 @@
     "route": "/permissions/create-permission",
     "description": "Can create new permission",
     "can": "permissions.create",
-    "for": "ADMIN",
+    "group": "ADMIN",
     "parent": [
       "permissions"
     ]
@@ -48,7 +75,7 @@
     "route": "/permission/update-permission",
     "description": "Can update details of permission",
     "can": "permissions.update",
-    "for": "ADMIN",
+    "group": "ADMIN",
     "parent": [
       "permissions"
     ]
@@ -57,7 +84,7 @@
     "route": "/permissions/delete-permission",
     "description": "Can delete permission",
     "can": "permissions.delete",
-    "for": "ADMIN",
+    "group": "ADMIN",
     "parent": [
       "permissions"
     ]
@@ -66,7 +93,7 @@
     "route": "/roles/create-role",
     "description": "Can create new role",
     "can": "roles.create",
-    "for": "ADMIN",
+    "group": "ADMIN",
     "parent": [
       "roles"
     ]
@@ -75,7 +102,7 @@
     "route": "/roles/update-role",
     "description": "Can update details of role",
     "can": "roles.update",
-    "for": "ADMIN",
+    "group": "ADMIN",
     "parent": [
       "roles"
     ]
@@ -84,7 +111,7 @@
     "route": "/roles/delete-role",
     "description": "Can delete role",
     "can": "roles.delete",
-    "for": "ADMIN",
+    "group": "ADMIN",
     "parent": [
       "roles"
     ]
@@ -93,7 +120,7 @@
     "route": "/admins/create-admin",
     "description": "Can create new admin",
     "can": "admins.create",
-    "for": "ADMIN",
+    "group": "ADMIN",
     "parent": [
       "admins"
     ]
@@ -102,7 +129,7 @@
     "route": "/admins/update-admin",
     "description": "Can update details of a admin",
     "can": "admins.edit",
-    "for": "ADMIN",
+    "group": "ADMIN",
     "parent": [
       "admins"
     ]
@@ -111,7 +138,7 @@
     "route": "/admins/update-password",
     "description": "Can Update admin's password",
     "can": "admins.update-password",
-    "for": "ADMIN",
+    "group": "ADMIN",
     "parent": [
       "admins"
     ]
@@ -120,16 +147,43 @@
     "route": "/admins/delete-admin",
     "description": "Can delete a admin",
     "can": "admins.delete",
-    "for": "ADMIN",
+    "group": "ADMIN",
     "parent": [
       "admins"
+    ]
+  },
+  {
+    "route": "/qna/create-question",
+    "description": "Can Create a question",
+    "can": "qna.create",
+    "group": "ADMIN",
+    "parent": [
+      "qna"
+    ]
+  },
+  {
+    "route": "/qna/edit-question",
+    "description": "Can Edit a question",
+    "can": "qna.edit",
+    "group": "ADMIN",
+    "parent": [
+      "qna"
+    ]
+  },
+  {
+    "route": "/qna/delete-question",
+    "description": "Can Delete a question",
+    "can": "qna.delete",
+    "group": "ADMIN",
+    "parent": [
+      "qna"
     ]
   },
   {
     "route": "/chat",
     "can": "chat.nav",
     "description": "Can view the chat page",
-    "for": "USER",
+    "group": "USER",
     "parent": [
       "$"
     ]

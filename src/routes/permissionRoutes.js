@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { rateLimit } from 'express-rate-limit';
-import isUser from '../middlewares/isAdmin.js';
+import isAdmin from '../middlewares/isAdmin.js';
 import tryCatch from '../middlewares/tryCatch.js';
 import { permissionController } from '../controllers/index.js';
 import { WINDOW, MAX_LIMIT } from '../../env.js';
@@ -15,10 +15,10 @@ const limiter = rateLimit({
   },
 });
 
-permissionRoutes.post('/create-permission', [limiter, isUser], tryCatch(permissionController.createPermission));
-permissionRoutes.get('/get-all-permissions', [limiter, isUser], tryCatch(permissionController.getAllPermissions));
-permissionRoutes.get('/get-unique-parents', [limiter, isUser], tryCatch(permissionController.getUniqueParents));
-permissionRoutes.put('/update-permission/:id', [limiter, isUser], tryCatch(permissionController.updatePermission));
-permissionRoutes.delete('/delete-permission/:id', [limiter, isUser], tryCatch(permissionController.deletePermission));
+permissionRoutes.post('/create-permission', [limiter, isAdmin], tryCatch(permissionController.createPermission));
+permissionRoutes.get('/get-all-permissions', [limiter, isAdmin], tryCatch(permissionController.getAllPermissions));
+permissionRoutes.get('/get-unique-parents', [limiter, isAdmin], tryCatch(permissionController.getUniqueParents));
+permissionRoutes.put('/update-permission/:id', [limiter, isAdmin], tryCatch(permissionController.updatePermission));
+permissionRoutes.delete('/delete-permission/:id', [limiter, isAdmin], tryCatch(permissionController.deletePermission));
 
 export default permissionRoutes;

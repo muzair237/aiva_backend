@@ -3,7 +3,6 @@ import helper from '../utils/helper.js';
 
 export default {
   createPermission: async (req, res) => {
-    console.log(req.body);
     const { route, description, can, parent, group } = req.body;
 
     if (!can || !route || !description || !parent || !group) {
@@ -38,11 +37,10 @@ export default {
       ...req.query,
       ...helper.filterQuery(req),
     };
-
     const query = {};
 
     if (type) {
-      query.for = type;
+      query.group = type;
     }
 
     if (searchText) {
@@ -54,30 +52,26 @@ export default {
     }
 
     if (startDate && endDate) {
-      query.created_at = {
-        $gte: new Date(startDate),
-        $lte: new Date(endDate),
-      };
+      const start = new Date(startDate);
+      start.setHours(0, 0, 0, 0);
+      const end = new Date(endDate);
+      end.setHours(23, 59, 59, 999);
+      query.createdAt = { $gte: start, $lt: end };
     }
 
     const sorting = helper.getSorting(sort, 'can');
 
     const count = await PERMISSIONS.countDocuments(query);
 
-    let finalQuery = PERMISSIONS.find();
-
-    if (Object.keys(query).length > 0) {
-      finalQuery = finalQuery.where(query);
-    }
-
     if (getAll === 'true') {
-      finalQuery = finalQuery.skip(0).limit(count);
-    } else {
-      finalQuery = finalQuery.skip((page - 1) * itemsPerPage).limit(itemsPerPage);
+      page = 1;
+      itemsPerPage = count;
     }
 
-    const permissions = await finalQuery.sort(sorting);
-
+    const permissions = await PERMISSIONS.find(query)
+      .skip((page - 1) * itemsPerPage)
+      .limit(itemsPerPage)
+      .sort(sorting);
     return res.status(200).json({
       success: true,
       message: 'Permissions fetched successfully',
@@ -97,7 +91,7 @@ export default {
 
   updatePermission: async (req, res, next) => {
     const { id } = req.params;
-    const { route, description, can, parent } = req.body;
+    const { route, description, can, parent, group } = req.body;
     if (!can || !route || !description || !parent) {
       return res.status(400).json({
         success: false,
@@ -112,7 +106,7 @@ export default {
       });
     }
     await PERMISSIONS.findByIdAndUpdate(id, {
-      $set: { route, description, can, parent },
+      $set: { route, description, can, parent, group },
     });
     return res.status(200).json({
       success: true,
@@ -122,7 +116,7 @@ export default {
 
   deletePermission: async (req, res) => {
     const { id } = req.params;
-    await PERMISSIONS.findByIdAndDelete(id);
+    const deletedPermission = await PERMISSIONS.findByIdAndDelete(id);
     await ROLES.updateMany(
       {
         permissions: { $in: [id] },
@@ -132,6 +126,7 @@ export default {
     return res.status(200).json({
       success: true,
       message: 'Permission deleted successfully',
+      deletedPermission,
     });
   },
 };

@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { rateLimit } from 'express-rate-limit';
 // import isUser from '../middlewares/isAdmin.js';
+import isAdmin from '../middlewares/isAdmin.js';
 import tryCatch from '../middlewares/tryCatch.js';
 import { QnAController } from '../controllers/index.js';
 import { WINDOW, MAX_LIMIT } from '../../env.js';
@@ -23,5 +24,9 @@ QnARoutes.get(
   ],
   tryCatch(QnAController.restoreQnA),
 );
+QnARoutes.get('/get-all-questions', [limiter, isAdmin], tryCatch(QnAController.getAllQuestions));
+QnARoutes.post('/create-question', [limiter, isAdmin], tryCatch(QnAController.createQuestion));
+QnARoutes.put('/update-question/:id', [limiter, isAdmin], tryCatch(QnAController.updateQuestion));
+QnARoutes.delete('/delete-question/:id', [limiter, isAdmin], tryCatch(QnAController.deleteQuestion));
 
 export default QnARoutes;

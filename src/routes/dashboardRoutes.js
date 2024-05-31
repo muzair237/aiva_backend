@@ -1,11 +1,11 @@
 import { Router } from 'express';
 import { rateLimit } from 'express-rate-limit';
-import isUser from '../middlewares/isUser.js';
+import isAdmin from '../middlewares/isAdmin.js';
 import tryCatch from '../middlewares/tryCatch.js';
-import { queryController } from '../controllers/index.js';
+import { dashboardController } from '../controllers/index.js';
 import { WINDOW, MAX_LIMIT } from '../../env.js';
 
-const queryRoutes = Router();
+const dashboardRoutes = Router();
 
 const limiter = rateLimit({
   windowMs: WINDOW * 1000,
@@ -15,7 +15,6 @@ const limiter = rateLimit({
   },
 });
 
-queryRoutes.post('/ask-query', [isUser, limiter], tryCatch(queryController.askQuery));
-queryRoutes.get('/get-chat/:id', [isUser, limiter], tryCatch(queryController.getChat));
+dashboardRoutes.get('/get-all-dashboard-cards', [limiter, isAdmin], tryCatch(dashboardController.getDashboardCards));
 
-export default queryRoutes;
+export default dashboardRoutes;

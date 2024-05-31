@@ -15,10 +15,7 @@ const adminSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    role: {
-      type: String,
-      required: true,
-    },
+    roles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'roles' }],
     permissions: {
       type: [String],
       default: [],
