@@ -16,5 +16,8 @@ const limiter = rateLimit({
 });
 
 dashboardRoutes.get('/get-all-dashboard-cards', [limiter, isAdmin], tryCatch(dashboardController.getDashboardCards));
+dashboardRoutes.get('/get-recent-queries', [limiter, isAdmin], tryCatch(dashboardController.getRecentQueries));
+dashboardRoutes.get('/get-today-query-count', [limiter, isAdmin], tryCatch(dashboardController.getTodayQueryCount));
+dashboardRoutes.get('/get-age-groups', [limiter, isAdmin], tryCatch(dashboardController.getAgeGroups));
 
 export default dashboardRoutes;
