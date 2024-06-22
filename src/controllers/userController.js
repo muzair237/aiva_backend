@@ -8,7 +8,7 @@ export default {
     if (!email || !password) {
       return res.status(401).json({ success: false, message: 'Invalid Credentials!' });
     }
-    let user = await USER.findOne({ email });
+    let user = await USER.findOne({ email }).populate({ path: 'role', model: ROLES, select: 'type' });
     if (!user || !helper.comparePassword(password, user?.password)) {
       return res.status(404).json({ success: false, message: 'Incorrect Email or Password!' });
     }

@@ -16,6 +16,7 @@ export default {
     await MESSAGE.create({
       message: query,
       userId: user._id,
+      timeStamp: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }),
       sender: user?.first_name,
     });
 
@@ -23,9 +24,17 @@ export default {
     let tokens = tokenizer.tokenize(query);
     tokens = removeStopwords(tokens);
 
+    console.log(tokens);
+
     const qna = await QnA.find({ keywords: { $in: tokens } });
     if (!qna || qna.length === 0) {
-      return res.status(404).json({ success: false, message: 'Could not find any answer' });
+      const response = await MESSAGE.create({
+        message: 'Could not find any answer',
+        userId: user._id,
+        timeStamp: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }),
+        sender: 'Virtual Assistant',
+      });
+      return res.status(200).json({ success: true, response });
     } else {
       let maxMatchCount = 0;
       let bestMatchIndex = -1;
@@ -46,17 +55,20 @@ export default {
         }
       }
 
-      await MESSAGE.create({
-        message: qna[bestMatchIndex].answer,
+      let finalAnswer;
+      if (bestMatchIndex !== -1) {
+        finalAnswer = qna[bestMatchIndex].answer;
+      } else {
+        finalAnswer = "Couldn't find any answer!";
+      }
+
+      const response = await MESSAGE.create({
+        message: finalAnswer,
         userId: user._id,
+        timeStamp: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }),
         sender: 'Virtual Assistant',
       });
-
-      if (bestMatchIndex !== -1) {
-        return res.status(200).json({ success: true, answer: qna[bestMatchIndex].answer });
-      } else {
-        return res.status(404).json({ success: false, message: 'Could not find any answer' });
-      }
+      return res.status(200).json({ success: true, response });
     }
   },
 
@@ -68,7 +80,7 @@ export default {
     const transformedMessages = chat.map((msg, index) => ({
       id: index + 1,
       roomId: index + 1,
-      createdAt: new Date(msg.createdAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+      timeStamp: msg.timeStamp,
       message: msg.message,
       sender: msg.sender,
     }));

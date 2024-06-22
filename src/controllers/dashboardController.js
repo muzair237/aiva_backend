@@ -63,6 +63,7 @@ export default {
 
     const recentQueries = await MESSAGE.find(query)
       .skip((page - 1) * itemsPerPage)
+      .sort({ createdAt: -1 })
       .limit(itemsPerPage);
 
     return res.status(200).json({
