@@ -6,6 +6,7 @@ import QnAController from './qnaController.js';
 import userController from './userController.js';
 import feedbackController from './feedbackController.js';
 import queryController from './queryController.js';
+import enquiryController from './enquiryController.js';
 
 export {
   dashboardController,
@@ -16,4 +17,5 @@ export {
   userController,
   feedbackController,
   queryController,
+  enquiryController,
 };

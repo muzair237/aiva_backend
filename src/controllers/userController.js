@@ -1,6 +1,10 @@
 import { USER, USER_JWT, ROLES, PERMISSIONS } from '../models/index.js';
 import { validateSignUpPayload } from '../utils/payloadValidation.js';
 import helper from '../utils/helper.js';
+import { v2 as cloudinary } from 'cloudinary';
+import { cloudinaryConfig } from '../utils/cloudinaryConfig.js';
+
+cloudinary.config(cloudinaryConfig);
 
 export default {
   login: async (req, res) => {
@@ -193,5 +197,50 @@ export default {
     await user.save();
 
     res.status(200).json({ success: true, message: 'Password Updated Successfully!' });
+  },
+
+  updateUser: async (req, res, next) => {
+    const { id } = req.params;
+
+    const { email } = req.body;
+
+    const userEmail = await USER.findOne({ email });
+    if (userEmail && userEmail._id.toString() !== id) {
+      return res.status(400).json({ success: false, message: 'Email you Provided is Already in Use!' });
+    }
+
+    const payload = req.body;
+    const counter = await USER.findOne({ _id: id });
+
+    let updatedUser;
+
+    if (counter) {
+      const user = {};
+      Object.keys(payload).forEach(element => {
+        if (element === 'password') {
+          payload[element] = helper.hashPassword(payload[element]);
+        }
+        user[element] = payload[element];
+      });
+
+      if (req.file) {
+        try {
+          const result = await cloudinary.uploader.upload(
+            `data:image/jpeg;base64,${req.file.buffer.toString('base64')}`,
+          );
+          user.profile_picture = result.secure_url;
+        } catch (err) {
+          console.error(err);
+          return next({ code: 500, success: false, message: 'Error in Uploading Image!' });
+        }
+      }
+
+      updatedUser = await USER.findOneAndUpdate({ _id: id }, { $set: { ...user } }, { new: true }).lean();
+      delete updatedUser.password;
+      delete updatedUser.permissions;
+      delete updatedUser.otp;
+    }
+
+    return res.status(200).json({ success: true, message: 'User Information Updated Successfully', updatedUser });
   },
 };

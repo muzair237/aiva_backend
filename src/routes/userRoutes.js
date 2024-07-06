@@ -5,8 +5,12 @@ import isUser from '../middlewares/isUser.js';
 import tryCatch from '../middlewares/tryCatch.js';
 import { userController } from '../controllers/index.js';
 import { WINDOW, MAX_LIMIT } from '../../env.js';
+import multer from 'multer';
 
 const userRoutes = Router();
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 const limiter = rateLimit({
   windowMs: WINDOW * 1000,
@@ -23,5 +27,11 @@ userRoutes.post('/verify-otp', [limiter], tryCatch(userController.verifyOTP));
 userRoutes.post('/update-password', [limiter], tryCatch(userController.updatePassword));
 userRoutes.get('/get-all-users', [limiter, isAdmin], tryCatch(userController.getAllUsers));
 userRoutes.get('/logout', [limiter, isUser], tryCatch(userController.logout));
+userRoutes.put(
+  '/update-user/:id',
+  upload.single('profile_picture'),
+  [limiter, isUser],
+  tryCatch(userController.updateUser),
+);
 
 export default userRoutes;

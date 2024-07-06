@@ -7,5 +7,6 @@ import USER from './user.js';
 import USER_JWT from './user_jwt.js';
 import FEEDBACK from './feedback.js';
 import MESSAGE from './message.js';
+import ENQUIRY from './enquiry.js';
 
-export { PERMISSIONS, ROLES, ADMIN, ADMIN_JWT, QnA, USER, USER_JWT, FEEDBACK, MESSAGE };
+export { PERMISSIONS, ROLES, ADMIN, ADMIN_JWT, QnA, USER, USER_JWT, FEEDBACK, MESSAGE, ENQUIRY };
