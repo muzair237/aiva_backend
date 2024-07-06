@@ -17,5 +17,7 @@ const limiter = rateLimit({
 
 queryRoutes.post('/ask-query', [isUser, limiter], tryCatch(queryController.askQuery));
 queryRoutes.get('/get-chat/:id', [isUser, limiter], tryCatch(queryController.getChat));
+queryRoutes.delete('/delete-message/:id', [isUser, limiter], tryCatch(queryController.deleteMessage));
+queryRoutes.delete('/delete-chat/:id', [isUser, limiter], tryCatch(queryController.deleteChat));
 
 export default queryRoutes;

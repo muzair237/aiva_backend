@@ -187,5 +187,23 @@
     "parent": [
       "$"
     ]
+  },
+  {
+    "route": "/profile",
+    "can": "profile.nav",
+    "description": "Can view the profile page",
+    "group": "USER",
+    "parent": [
+      "$"
+    ]
+  },
+  {
+    "route": "/settings",
+    "can": "settings.nav",
+    "description": "Can view the settings page",
+    "group": "USER",
+    "parent": [
+      "$"
+    ]
   }
 ]

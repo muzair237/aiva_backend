@@ -7,6 +7,7 @@ import QnARoutes from './qnaRoutes.js';
 import userRoutes from './userRoutes.js';
 import feedbackRoutes from './feedbackRoutes.js';
 import queryRoutes from './queryRoutes.js';
+import enquiryRoutes from './enquiryRoutes.js';
 
 const router = Router();
 
@@ -19,5 +20,6 @@ router.use('/QnA', QnARoutes);
 router.use('/user', userRoutes);
 router.use('/feedback', feedbackRoutes);
 router.use('/query', queryRoutes);
+router.use('/enquiry', enquiryRoutes);
 
 export default router;

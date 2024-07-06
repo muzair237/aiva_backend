@@ -12,3 +12,6 @@ export const EMAIL_USER = process.env.EMAIL_USER || '';
 export const EMAIL_PASS = process.env.EMAIL_PASS || '';
 export const WINDOW = process.env.WINDOW || '';
 export const MAX_LIMIT = process.env.MAX_LIMIT || '';
+export const CLOUD_NAME = process.env.CLOUD_NAME || '';
+export const API_KEY = process.env.API_KEY || '';
+export const API_SECRET = process.env.API_SECRET || '';
