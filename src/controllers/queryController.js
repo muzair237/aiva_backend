@@ -67,7 +67,7 @@ export default {
         timeStamp: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }),
         sender: 'Virtual Assistant',
       });
-      return res.status(200).json({ success: true, message, response });
+      return res.status(200).json({ success: true, message: message, response });
     }
   },
 
