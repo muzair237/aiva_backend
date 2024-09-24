@@ -1,4 +1,4 @@
-# AIVA_Backend GitHub Repository
+# AIVA Backend GitHub Repository
 
 ## Description:
 Welcome to the AIVA Backend GitHub Repository! This repository is dedicated to the development and implementation of AIVA (Artificially Intelligent Virtual Assistant), designed to streamline communication in educational institutions by providing real-time assistance to students and staff. AIVA employs advanced Natural Language Processing (NLP) techniques to engage in meaningful conversations, facilitating the admissions process and answering university-related queries.
