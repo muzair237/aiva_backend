@@ -14,7 +14,7 @@ const allowedOrigins = [FRONTEND_ADMIN_URL, FRONTEND_USER_URL];
 mongoose
   .connect(MONGO_STRING)
   .then(() => {
-    console.log('MongoDB connected');
+    console.log('MongoDB Connected!');
   })
   .catch(err => console.log(err));
 

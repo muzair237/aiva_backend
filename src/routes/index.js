@@ -8,6 +8,7 @@ import userRoutes from './userRoutes.js';
 import feedbackRoutes from './feedbackRoutes.js';
 import queryRoutes from './queryRoutes.js';
 import enquiryRoutes from './enquiryRoutes.js';
+import generalRoutes from './generalRoutes.js';
 
 const router = Router();
 
@@ -21,5 +22,6 @@ router.use('/user', userRoutes);
 router.use('/feedback', feedbackRoutes);
 router.use('/query', queryRoutes);
 router.use('/enquiry', enquiryRoutes);
+router.use('/general', generalRoutes);
 
 export default router;

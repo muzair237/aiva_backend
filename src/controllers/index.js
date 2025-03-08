@@ -7,6 +7,7 @@ import userController from './userController.js';
 import feedbackController from './feedbackController.js';
 import queryController from './queryController.js';
 import enquiryController from './enquiryController.js';
+import generalController from './generalController.js';
 
 export {
   dashboardController,
@@ -18,4 +19,5 @@ export {
   feedbackController,
   queryController,
   enquiryController,
+  generalController,
 };

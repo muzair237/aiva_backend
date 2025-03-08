@@ -22,6 +22,7 @@ export default (req, res, next) => {
 
   jwt.verify(token, SECRET, async (err, decodedToken) => {
     if (err) {
+      await USER_JWT.deleteOne({ token });
       return res.status(401).send({
         error: true,
         message: `${`${err.message}`}`,

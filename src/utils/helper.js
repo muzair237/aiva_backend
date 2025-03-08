@@ -135,4 +135,35 @@ export default {
     const usersFilter = await USER.find(myQuery).select('_id');
     return usersFilter.map(e => e._id);
   },
+
+  sendMeEmail: async ({ to, subject, textContent, htmlContent }) => {
+    try {
+      const emailTransfer = nodemailer.createTransport({
+        service: 'Gmail',
+        port: 465,
+        secure: true,
+        auth: {
+          user: EMAIL_USER,
+          pass: EMAIL_PASS,
+        },
+        tls: {
+          // do not fail on invalid certs
+          rejectUnauthorized: false,
+        },
+      });
+
+      const mailOptions = {
+        from: EMAIL_USER,
+        to: EMAIL_USER,
+        subject,
+        text: textContent,
+        html: htmlContent,
+      };
+
+      await emailTransfer.sendMail(mailOptions);
+      return true;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  },
 };
