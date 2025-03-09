@@ -68,6 +68,7 @@ export default {
       _id: { $in: permissions_find_array },
     });
     admin.permissions = permissions.map(i => i.can);
+    
 
     const new_admin_request = admin;
     new_admin_request.password = helper.hashPassword(new_admin_request.password);
